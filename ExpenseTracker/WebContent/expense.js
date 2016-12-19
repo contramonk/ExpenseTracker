@@ -4,6 +4,17 @@ $(function() {
 
 var start = function() {
 	$('body').text("");
+	$nav = $('<nav class="navbar navbar-default navbar-static-top">');
+	$navContainer = $('<container>');
+	$containerWrapper = ('<div class = "container">');
+	$navP = $('<p class = "navbar-brand">');
+	
+	$navP.text('Budgetapp');
+	
+	$navContainer.append($navP);
+	$nav.append($navContainer);
+	$('body').append($nav);
+	$('body').append($containerWrapper)
 	$.ajax({
 		type : "GET",
 		url : "api/expense",
@@ -14,9 +25,9 @@ var start = function() {
 };
 
 var printTable = function(data) {
-	$createButton = $('<button>')
-	$table = $('<table>');
-	$thead = ('<thead>')
+	$createButton = $('<button class = "btn btn-success btn-xs">')
+	$createSpan = $('<span class = "glyphicon glyphicon-plus">')
+	$table = $('<table class = "table table-hover">');
 	$row = $('<tr>');
 	$th1 = $('<th>');
 	$th2 = $('<th>');
@@ -24,17 +35,17 @@ var printTable = function(data) {
 	$th4 = $('<th>');
 	$th5 = $('<th>');
 
-	$createButton.text('add');
 	$th1.text("id");
 	$th2.text("title");
 	$th3.text("description");
 	$th4.text("amount");
 	$th5.text("category");
 
-	$row.append($th1, $th2, $th3, $th4, $th5);
+	$createButton.append($createSpan);
+	$row.append($th2, $th3, $th4, $th5); // removed th1
 	$table.append($row);
-	$('body').append($createButton);
-	$('body').append($table);
+	$('.container').append($createButton);
+	$('.container').append($table);
 	
 	$createButton.click(function() {createEvent()});
 
@@ -103,18 +114,26 @@ var addEvent = function(e, $titleInput, $descriptionInput, $amountInput, $catego
 
 var populateTable = function(data) {
 	var totalAmount = 0;
+	$tbody = $('<tbody>');
+	$table.append($tbody);
 	$(data).each(function() {
 		$row = $('<tr>');
-		$table.append($row);
-		$editButton = $('<button>');
-		$deleteButton = $('<button>');
-		$editButton.text("edit");
-		$deleteButton.text("delete");
+		$tbody.append($row);
+		$editButton = $('<button class = "btn btn-primary btn-xs">');
+		$editSpan = $('<span class="glyphicon glyphicon-pencil">');
+		
+		$deleteButton = $('<button class = "btn btn-danger btn-xs">');
+		$deleteSpan = $('<span class="glyphicon glyphicon-trash">')
+		$editButton.append($editSpan);
+		$deleteButton.append($deleteSpan);
 
 		for ( var key in this) {
-			$column = $('<td>');
-			$column.text(this[key]);
-			$row.append($column);
+			if(key != 'id') {
+				$column = $('<td>');
+				$column.text(this[key]);
+				$row.append($column);
+			}
+
 		}
 		var id = this.id;
 		var title = this.title;
@@ -123,16 +142,22 @@ var populateTable = function(data) {
 		var category = this.category;
 		totalAmount = this.amount + totalAmount;
 
+		$tdEdit = $('<td>');
+		$tdDelete = $('<td>');
 		$editButton.click(function(e) {
 			editEvent(e, id, title, description, amount, category)
 			});
 		$deleteButton.click(function(e) {deleteEvent(e, id)});
-		$row.append($editButton, $deleteButton);
+		$tdEdit.append($editButton);
+		$tdDelete.append($deleteButton);
+		$row.append($tdEdit, $tdDelete);
 
 	});
-	$totalRow = $('<tr>');
-	$totalRow.text('total: $' + totalAmount.toFixed(2));
-	$table.append($totalRow);
+	$totalDiv = $('<div>');
+	$totalH1 = $('<h3>');
+	$totalH1.text('total: $' + totalAmount.toFixed(2));
+	$totalDiv.append($totalH1);
+	$table.append($totalDiv);
 	console.log(totalAmount.toFixed(2));
 }
 
