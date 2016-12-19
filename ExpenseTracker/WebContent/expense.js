@@ -102,6 +102,7 @@ var addEvent = function(e, $titleInput, $descriptionInput, $amountInput, $catego
 };
 
 var populateTable = function(data) {
+	var totalAmount = 0;
 	$(data).each(function() {
 		$row = $('<tr>');
 		$table.append($row);
@@ -120,6 +121,7 @@ var populateTable = function(data) {
 		var description = this.description;
 		var amount = this.amount;
 		var category = this.category;
+		totalAmount = this.amount + totalAmount;
 
 		$editButton.click(function(e) {
 			editEvent(e, id, title, description, amount, category)
@@ -128,6 +130,10 @@ var populateTable = function(data) {
 		$row.append($editButton, $deleteButton);
 
 	});
+	$totalRow = $('<tr>');
+	$totalRow.text('total: $' + totalAmount.toFixed(2));
+	$table.append($totalRow);
+	console.log(totalAmount.toFixed(2));
 }
 
 
