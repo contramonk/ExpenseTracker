@@ -1,5 +1,5 @@
 #ExpenseTracker
-An Expense Tracking CRUD application using JQuery.
+An Expense Tracking CRUD application using JQuery. You can view the application on [my website](http://www.contramonk.com:8080/ExpenseTracker/)
 
 ##Technologies
 1. JQuery
